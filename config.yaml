@@ -1,0 +1,77 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+tproxy-port: 7893
+bind-address: '*'
+mode: rule
+allow-lan: true
+log-level: silent
+external-controller: 0.0.0.0:2222
+external-ui: yacd-gh-pages
+ipv6: true
+secret : ""
+dns:
+  enable: true
+  ipv6: true
+  listen: 0.0.0.0:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 100.0.0.1/10
+  use-hosts: true
+  nameserver:
+    - https://cloudflare-dns.com/dns-query
+    - tls://1dot1dot1dot1.cloudflare-dns.com
+  fallback:
+    - https://dns.google/dns-query
+proxies:
+  - name: VMESS
+    server: 104.17.2.81
+    port: 80
+    type: vmess
+    uuid: 4590df4c-066b-4dc5-aff5-d573b1812047
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /v2ray
+      headers:
+        Host: sg-01.mdxcloud.net
+    udp: false
+  - name: VMESSTLS
+    server: 104.18.20.219
+    port: 443
+    type: vmess
+    uuid: 16a02e23-e9e4-4c7c-93ec-2d38f6a1da44
+    alterId: 0
+    cipher: auto
+    tls: true
+    skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /v2ray
+      headers:
+        Host: sg-02.mdxcloud.net
+    udp: false
+  - name: TROJAN
+    server: 172.104.60.13
+    port: 443
+    type: trojan
+    password: TROJAN
+    sni: cf-vod.nimo.tv
+    skip-cert-verify: true
+    udp: false
+proxy-groups:
+  - name: PROVIDER
+    type: load-balance
+    url: 'http://cp.cloudflare.com/'
+    interval: 60
+    lazy: false
+    disable-udp: false
+    strategy: consistent-hashing # or round-robin
+    proxies:
+      - VMESS
+      - VMESSTLS
+      - TROJAN
+rules:
+  - MATCH,PROVIDER

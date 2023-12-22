@@ -1,0 +1,99 @@
+#!/system/bin/sh
+
+scripts=`realpath $0`
+scripts_dir=`dirname ${scripts}`
+. /data/adb/clash/clash.config
+
+start_clash() {
+    rm -rf ${CFM_logs_file}
+
+    if [ "${ipv6}" = "false" ] ; then
+        for net in /proc/sys/net/ipv6/conf/{wlan*,*data*} ; do
+            echo ${net} | grep -q wlan
+            if [ $? -eq 0 ] ; then
+                echo 0 > ${net}/accept_ra
+            fi
+            echo 1 > ${net}/disable_ipv6
+        done
+    else
+        for net in /proc/sys/net/ipv6/conf/{wlan*,*data*} ; do
+            echo ${net} | grep -q wlan
+            if [ $? -eq 0 ] ; then
+                echo 1 > ${net}/accept_ra
+            fi
+            echo 0 > ${net}/disable_ipv6
+        done
+    fi
+
+    pid=`cat ${Clash_pid_file} 2> /dev/null`
+    if (cat /proc/${pid}/cmdline | grep -q clash) ; then
+        echo "[info] : terdeteksi bahwa Clash telah dimulai. on off module magisk" >> ${CFM_logs_file}
+        exit 1
+    fi
+
+        echo "${date_day}" >> ${CFM_logs_file}
+        
+    if [ -f "${Clash_bin_path}" ] ; then
+        mkdir -p ${Clash_run_path}
+        chown ${Clash_user_group} ${Clash_bin_path}
+        chmod ${Clash_permissions} ${Clash_bin_path}
+        chown ${Clash_user_group} ${temporary_config_file}
+        chmod 0644 ${temporary_config_file}
+        setcap 'cap_net_admin,cap_net_raw+ep' ${Clash_bin_path}
+
+        ${busybox_path} crontab -c ${Clash_run_path} -r
+        touch ${Clash_run_path}/root
+        chmod 0600 ${Clash_run_path}/root
+
+        echo "${update_interval} ${scripts_dir}/clash.tool -s" > ${Clash_run_path}/root \
+        && echo "[info] : waktu berlangganan otomatis diaktifkan." >> ${CFM_logs_file}
+        echo "*/1 * * * * ${scripts_dir}/clash.tool -k" >> ${Clash_run_path}/root \
+        && echo "[info] : DNS terbuka." >> ${CFM_logs_file}
+
+        sed -i '/^[  ]*$/d' ${CFM_logs_file}
+        if [ "${filter_local}" = "true" ] ; then
+            com="${scripts_dir}/clash.tool -m ; sleep 10 ;${scripts_dir}/clash.tool -m ; sleep 10; ${scripts_dir}/clash.tool -m ;sleep 10; ${scripts_dir}/clash.tool -m;sleep 10;${scripts_dir}/clash.tool -m ; sleep 10;${scripts_dir}/clash.tool -m"
+            echo "*/1 * * * * ${com}" >> ${Clash_run_path}/root && echo "[info] : bypass otomatis ip lokal diaktifkan." >> ${CFM_logs_file}
+        fi
+    else
+        echo "[error] : kernel clash tidak terdeteksi." >> ${CFM_logs_file}
+        exit 1
+    fi
+
+    if [ -f ${temporary_config_file} ] && [ -f ${Clash_geoip_file} ] ; then
+        if $(${Clash_bin_path} -d ${Clash_data_dir} -t -f ${temporary_config_file} > /dev/null) ; then
+            nohup ${busybox_path} setuidgid 0:3005 ${Clash_bin_path} -d ${Clash_data_dir} -f ${temporary_config_file} > /dev/null 2>&1 &
+            echo -n $! > ${Clash_pid_file}
+            echo "[info] : clash dimulai." >> ${CFM_logs_file}
+        fi
+    fi
+
+    sleep 3
+
+    if ! (${scripts_dir}/clash.tool -p) ; then
+        kill -15 `cat ${Clash_pid_file}`
+        rm -rf ${Clash_pid_file}
+        echo "[error] : tidak ada port yang terdeteksi, clash dihentikan." >> ${CFM_logs_file}
+        exit 1
+    fi
+}
+
+stop_clash() {
+    kill -15 `cat ${Clash_pid_file}`
+    rm -rf ${Clash_pid_file}
+    echo "[info] : clash di hentikan." >> ${CFM_logs_file}
+}
+
+while getopts ":sk" signal ; do
+    case ${signal} in
+        s)
+            start_clash
+            ;;
+        k)
+            stop_clash
+            ;;
+        ?)
+            echo ""
+            ;;
+    esac
+done

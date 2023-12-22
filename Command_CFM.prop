@@ -1,0 +1,11 @@
+#clash
+alias cek='su -c /data/adb/clash/core/clash -t -d /data/adb/clash -f /data/adb/clash/config.yaml'
+alias stop='su -c touch /data/adb/modules/ClashforMagisk/disable'
+alias start='su -c rm -f /data/adb/modules/ClashforMagisk/disable'
+alias restart='su -c touch /data/adb/modules/ClashforMagisk/disable && su -c rm -f /data/adb/modules/ClashforMagisk/disable'
+alias clear='su -c /data/adb/clash/scripts/clash.service -k && su -c /data/adb/clash/scripts/clash.tproxy -k'
+alias port='sudo lsof -i :9090 && sudo lsof -i :1053'
+alias log='su -c curl -v http://127.0.0.1:9090/logs?level=debug'
+alias pid='su -c cat /data/adb/clash/run/clash.pid'
+alias runlog='su -c cat /data/adb/clash/run/run.logs'
+alias tc='ps -eo command,lstart,etime | grep clash'
