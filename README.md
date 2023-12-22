@@ -23,7 +23,8 @@ yet another mihomo clash for magisk
 4. Dual Dashboard
    - MetaCubex : http://127.0.0.1:9090/ui/meta
    - Default : http://127.0.0.1:9090/ui/yacd
-
+5. Secret Dashboard : `sign`
+   
 ## About
 nosignal is gone
 
