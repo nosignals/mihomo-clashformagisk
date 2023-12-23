@@ -18,12 +18,15 @@ yet another mihomo clash for magisk
 
 ## Configuration
 1. Config files at `/data/adb/clash`
-2. Proxy files at `/data/adb/clash/proxy_provider/allProxy.yaml`
-3. Rules files at `/data/adb/clash/rule_provider`
-4. Dual Dashboard
+4. Proxy files at `/data/adb/clash/proxy_provider/allProxy.yaml`
+5. Rules files at `/data/adb/clash/rule_provider`
+6. Tiny File Manager
+   - http://127.0.0.1:9095/tinyfm
+   - path `/data/adb/clash/webserver/www/`
+7. Dual Dashboard
    - MetaCubex : http://127.0.0.1:9090/ui/meta
    - Default : http://127.0.0.1:9090/ui/yacd
-5. Secret Dashboard : `sign`
+8. Secret Dashboard : `sign`
    
 ## About
 nosignal is gone
@@ -33,6 +36,8 @@ nosignal is gone
 > - [Metacubex](https://github.com/MetaCubeX)
 > - [haishanh](https://github.com/haishanh/yacd)
 > - [Busybox NDK](https://github.com/Magisk-Modules-Repo/busybox-ndk)
+> - [Tiny FIle Manager](https://github.com/prasathmani/tinyfilemanager)
+> - [PHP](https://github.com/php/php-src)
 > - [nosignal](https://github.com/nosignals)
 > - [Wiki Mihomo Clash](https://wiki.metacubex.one/)
 > - [Discord DBAI Server](https://discord.gg/pEuzZZaHzV)
