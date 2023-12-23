@@ -36,6 +36,8 @@ nosignal is gone
 > - [Metacubex](https://github.com/MetaCubeX)
 > - [haishanh](https://github.com/haishanh/yacd)
 > - [Busybox NDK](https://github.com/Magisk-Modules-Repo/busybox-ndk)
+> - [Tiny FIle Manager](https://github.com/prasathmani/tinyfilemanager)
+> - [PHP](https://github.com/php/php-src)
 > - [nosignal](https://github.com/nosignals)
 > - [Wiki Mihomo Clash](https://wiki.metacubex.one/)
 > - [Discord DBAI Server](https://discord.gg/pEuzZZaHzV)
