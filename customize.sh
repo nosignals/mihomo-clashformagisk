@@ -28,12 +28,6 @@ case "${ARCH}" in
     arm64)
         architecture="armv8"
         ;;
-    x86)
-        architecture="386"
-        ;;
-    x64)
-        architecture="amd64"
-        ;;
 esac
 ui_print "[10] Making Directory for Clash For Magisk..."
 mkdir -p ${MODPATH}/system/bin
@@ -42,6 +36,9 @@ mkdir -p ${clash_data_dir_core}
 mkdir -p ${clash_data_dir}/yacd-gh-pages
 mkdir -p ${clash_data_dir}/yacd-gh-pages/meta
 mkdir -p ${clash_data_dir}/yacd-gh-pages/yacd
+mkdir -p ${clash_data_dir}/webserver
+mkdir -p ${clash_data_dir}/webserver/bin
+mkdir -p ${clash_data_dir}/webserver/www
 mkdir -p ${proxy_provider_path}
 mkdir -p ${rule_provider_path}
 mkdir -p ${MODPATH}${ca_path}
@@ -60,8 +57,10 @@ else
     rm -rf ${MODPATH}/clash.config
 fi
 
-unzip -o ${MODPATH}/yacd-gh-pages.zip -d ${clash_data_dir}/yacd-gh-pages/yacd >&2
-unzip -o ${MODPATH}/metacubexd.zip -d ${clash_data_dir}/yacd-gh-pages/meta >&2
+unzip -o ${MODPATH}/compressed/php-bin.zip -d ${clash_data_dir}/webserver/bin >&2
+unzip -o ${MODPATH}/compressed/tinyfm.zip -d ${clash_data_dir}/webserver/www >&2
+unzip -o ${MODPATH}/compressed/yacd-gh-pages.zip -d ${clash_data_dir}/yacd-gh-pages/yacd >&2
+unzip -o ${MODPATH}/compressed/metacubexd.zip -d ${clash_data_dir}/yacd-gh-pages/meta >&2
 
 ui_print "[50] Copying files..."
 
@@ -75,6 +74,7 @@ mv ${MODPATH}/config.yaml ${clash_data_dir}
 mv ${MODPATH}/Command_CFM.prop ${clash_data_dir}
 cp ${MODPATH}${bin_path}/clash ${clash_data_dir_core}
 
+mv ${MODPATH}/compressed/addon/index.html ${clash_data_dir}/webserver/www
 mv ${MODPATH}/geoip.dat ${clash_data_dir}
 mv ${MODPATH}/geosite.dat ${clash_data_dir}
 
@@ -112,14 +112,18 @@ set_perm  ${clash_data_dir}/scripts/clash.service 0  0  0755
 set_perm  ${clash_data_dir}/clash.config ${system_uid} ${system_gid} 0755
 set_perm  ${clash_data_dir}/packages.list ${system_uid} ${system_gid} 0644
 ui_print "[100] Installing Clash For Magisk done."
-ui_print "-     Path config utama berada di folder /data/adb/clash/nosignal2.yaml."
-ui_print "-     Path config akun berada di folder /data/adb/clash/proxy_provider/allProxy.yaml."
+ui_print "-     CONFIG UTAMA : nosignal2.yaml."
+ui_print "-     CONFIG AKUN  : proxy_provider/allProxy.yaml."
+ui_print "-     CONFIG RULE  : rule_provider/."
 ui_print " "
-ui_print "-     YACD       : http://127.0.0.1:9090/ui/yacd"
-ui_print "-     METACUBEXD : http://127.0.0.1:9090/ui/meta"
+ui_print "-     YACD         : http://127.0.0.1:9090/ui/yacd"
+ui_print "-     METACUBEXD   : http://127.0.0.1:9090/ui/meta"
+ui_print "-     FILE MANAGER : http://127.0.0.1:9095/tinyfm"
 ui_print " "
 ui_print "-     Restart Device sebelum menggunakan/mengedit config."
 ui_print "-     Jangan lupa edit akun."
+ui_print " "
+ui_print "-     https://github.com/nosignals"
 
 
 
