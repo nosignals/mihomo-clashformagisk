@@ -37,7 +37,6 @@ stop_wserver() {
 
 start_clash() {
     rm -rf ${CFM_logs_file}
-    stop_wserver
 
     if [ "${ipv6}" = "false" ] ; then
         for net in /proc/sys/net/ipv6/conf/{wlan*,*data*} ; do
