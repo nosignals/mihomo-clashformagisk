@@ -41,3 +41,4 @@ nosignal is gone
 > - [nosignal](https://github.com/nosignals)
 > - [Wiki Mihomo Clash](https://wiki.metacubex.one/)
 > - [Discord DBAI Server](https://discord.gg/pEuzZZaHzV)
+> - [Ulo Tech Channel](https://www.youtube.com/@ulo-tech)
